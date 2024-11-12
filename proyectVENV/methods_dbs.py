@@ -1,9 +1,18 @@
 from fastapi import FastAPI, Depends
 from pydantic import BaseModel
 from sqlalchemy.orm import Session
+from fastapi.middleware.cors import CORSMiddleware
 from dbs import SessionLocal, SensorADC, SensorDistancia, SensorAcelerometro, SensorBME
 
 app = FastAPI()
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["http://localhost:3000"],  # Frontend origin
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 class sensorADC_DTO(BaseModel):
     fecha: str

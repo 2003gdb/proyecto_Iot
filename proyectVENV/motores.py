@@ -83,15 +83,15 @@ def controlar_motores():
     while True:
         events = get_gamepad()
         for event in events:
-            if event.ev_type == 'Key' and event.code == 'BTN_SOUTH' and event.state == 1:  # Botón A
+            if event.ev_type == 'Key' and event.code == 'BTN_NORTH' and event.state == 1:  # Botón B en Switch
                 motores.adelante()
-            elif event.ev_type == 'Key' and event.code == 'BTN_EAST' and event.state == 1:  # Botón B
+            elif event.ev_type == 'Key' and event.code == 'BTN_SOUTH' and event.state == 1:  # Botón A en Switch
                 motores.atras()
-            elif event.ev_type == 'Key' and event.code == 'BTN_NORTH' and event.state == 1:  # Botón X
+            elif event.ev_type == 'Key' and event.code == 'BTN_WEST' and event.state == 1:  # Botón Y en Switch
                 motores.go_left()
-            elif event.ev_type == 'Key' and event.code == 'BTN_WEST' and event.state == 1:  # Botón Y
+            elif event.ev_type == 'Key' and event.code == 'BTN_EAST' and event.state == 1:  # Botón X en Switch
                 motores.go_right()
-            elif event.ev_type == 'Key' and event.code == 'BTN_MODE' and event.state == 1:  # Botón central
+            elif event.ev_type == 'Key' and event.code == 'BTN_MODE' and event.state == 1:  # Botón central (Home)
                 motores.detener()
 
 if __name__ == '__main__':

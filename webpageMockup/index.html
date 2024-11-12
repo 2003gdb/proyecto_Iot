@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Proyecto IoT</title>
+    <link rel="stylesheet" href="estilos.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script> 
+</head>
+<body>
+
+    <!-- Header -->
+    <header>
+        <h1>Proyecto IoT</h1>
+        <nav>
+            <a href="#documentacion">Documentación</a>
+            <a href="#visualizacion-sensores">Datos de Sensores</a>
+        </nav>
+    </header>
+
+    <!-- Contenido principal -->
+    <div class="container">
+        <section id="visualizacion-sensores" class="section">
+            <h2>Datos de Sensores</h2>
+            <p>A continuación se presentan las gráficas de los datos recopilados de los diferentes sensores del carrito IoT.</p>
+            
+            <div class="sensor-graficas">
+                <!-- Gráfica para el Sensor Acelerómetro -->
+                <div class="sensor-grafico">
+                    <h3>Sensor Acelerómetro</h3>
+                    <canvas id="graficoAcelerometro"></canvas>
+                </div>
+
+                <!-- Gráfica para el Sensor ADC -->
+                <div class="sensor-grafico">
+                    <h3>Sensor ADC</h3>
+                    <canvas id="graficoADC"></canvas>
+                </div>
+
+                <!-- Gráfica para el Sensor BME -->
+                <div class="sensor-grafico">
+                    <h3>Sensor BME</h3>
+                    <canvas id="graficoBME"></canvas>
+                </div>
+
+                <!-- Gráfica para el Sensor Distancia -->
+                <div class="sensor-grafico">
+                    <h3>Sensor de Distancia</h3>
+                    <canvas id="graficoDistancia"></canvas>
+                </div>
+            </div>
+        </section>
+
+        <!-- Sección de Documentación -->
+        <section id="documentacion" class="section">
+            <h2>Documentación Técnica</h2>
+            <p>Accede a la documentación detallada del proyecto, incluyendo esquemas, circuitos y código.</p>
+            <a href="https://github.com/2003gdb/proyecto_Iot/" class="button">Descargar Documentación</a>
+        </section>
+
+    </div>
+
+
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <p>© 2023 Proyecto IoT - Todos los derechos reservados</p>
+    </footer>
+    <script src="chart.js"></script>
+</body>
+</html>
