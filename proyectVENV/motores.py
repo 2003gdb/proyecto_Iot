@@ -4,13 +4,15 @@ import threading
 
 class Motores:
     def __init__(self) -> None:
+        #right wheel
         self.motor1 = 36  # Entrada
         self.motor2 = 38    # Entrada
         self.motor3 = 40   # Habilitar
         
-        self.motor4 = 26  # Entrada
-        self.motor5 = 24    # Entrada
-        self.motor6 = 22   # Habilitar
+        #left wheel
+        self.motor4 = 29  # Entrada
+        self.motor5 = 31    # Entrada
+        self.motor6 = 33   # Habilitar
 
         self.configurar_motores()
         self.detener()
@@ -53,7 +55,7 @@ class Motores:
         GPIO.output(self.motor5, GPIO.HIGH)
         GPIO.output(self.motor6, GPIO.HIGH)
 
-    def go_right(self) -> None:
+    def turn_left(self) -> None:
         # Activar motores para moverse hacia adelante
         GPIO.output(self.motor1, GPIO.HIGH)
         GPIO.output(self.motor2, GPIO.LOW)
@@ -63,7 +65,7 @@ class Motores:
         GPIO.output(self.motor5, GPIO.LOW)
         GPIO.output(self.motor6, GPIO.LOW)
 
-    def go_left(self) -> None:
+    def turn_right(self) -> None:
         # Activar motores para moverse hacia adelante
         GPIO.output(self.motor1, GPIO.LOW)
         GPIO.output(self.motor2, GPIO.LOW)
@@ -88,9 +90,9 @@ def controlar_motores():
             elif event.ev_type == 'Key' and event.code == 'BTN_SOUTH' and event.state == 1:  # Botón A en Switch
                 motores.atras()
             elif event.ev_type == 'Key' and event.code == 'BTN_WEST' and event.state == 1:  # Botón Y en Switch
-                motores.go_left()
+                motores.turn_right()
             elif event.ev_type == 'Key' and event.code == 'BTN_EAST' and event.state == 1:  # Botón X en Switch
-                motores.go_right()
+                motores.turn_left()
             elif event.ev_type == 'Key' and event.code == 'BTN_MODE' and event.state == 1:  # Botón central (Home)
                 motores.detener()
 
