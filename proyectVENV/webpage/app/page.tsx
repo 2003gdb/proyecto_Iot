@@ -42,130 +42,179 @@ interface BME {
 }
 
 export default function Home() {
-  const [data, setData] = useState<ADC[]>([]);
+  const [adcData, setAdcData] = useState<ADC[]>([]);
+  const [acelerometroData, setAcelerometroData] = useState<Acelerometro[]>([]);
+  const [distanciaData, setDistanciaData] = useState<Distancia[]>([]);
+  const [bmeData, setBmeData] = useState<BME[]>([]);
   const [isClient, setIsClient] = useState(false);
 
-  // Check if component is mounted on the client
   useEffect(() => {
     setIsClient(true);
   }, []);
 
-  async function fetchData() {
-    console.log("FechData");
+  async function fetchAdcData() {
     try {
       const response = await axios.get("http://127.0.0.1:8000/get_sensorADC");
-      console.log("Fetched data:", response.data); // Check the structure here
-      setData(response.data);
+      setAdcData(response.data);
     } catch (error) {
-      console.error("Error fetching data:", error);
+      console.error("Error fetching ADC data:", error);
+    }
+  }
+
+  async function fetchAcelerometroData() {
+    try {
+      const response = await axios.get("http://127.0.0.1:8000/get_sensorAcelerometro");
+      setAcelerometroData(response.data);
+    } catch (error) {
+      console.error("Error fetching Acelerometro data:", error);
+    }
+  }
+
+  async function fetchDistanciaData() {
+    try {
+      const response = await axios.get("http://127.0.0.1:8000/get_sensorDistancia");
+      setDistanciaData(response.data);
+    } catch (error) {
+      console.error("Error fetching Distancia data:", error);
+    }
+  }
+
+  async function fetchBmeData() {
+    try {
+      const response = await axios.get("http://127.0.0.1:8000/get_sensorBME");
+      setBmeData(response.data);
+    } catch (error) {
+      console.error("Error fetching BME data:", error);
     }
   }
 
   useEffect(() => {
-    fetchData();
+    fetchAdcData();
+    fetchAcelerometroData();
+    fetchDistanciaData();
+    fetchBmeData();
+
     const interval = setInterval(() => {
-      fetchData();
+      fetchAdcData();
+      fetchAcelerometroData();
+      fetchDistanciaData();
+      fetchBmeData();
     }, 2000);
+
     return () => clearInterval(interval);
   }, []);
 
-  if (!isClient) return null; // Prevent rendering on the server side
+  if (!isClient) return null;
 
-  const formattedData = data.map((item) => ({
+  const formattedAdcData = adcData.map((item) => ({
     ...item,
-    fecha: new Date(item.fecha).toLocaleTimeString(), // Format date as time
+    fecha: new Date(item.fecha).toLocaleTimeString(),
   }));
 
+  const formattedAcelerometroData = acelerometroData.map((item) => ({
+    ...item,
+    fecha: new Date(item.fecha).toLocaleTimeString(),
+  }));
+
+  const formattedDistanciaData = distanciaData.map((item) => ({
+    ...item,
+    fecha: new Date(item.fecha).toLocaleTimeString(),
+  }));
+
+  const formattedBmeData = bmeData.map((item) => ({
+    ...item,
+    fecha: new Date(item.fecha).toLocaleTimeString(),
+  }));
 
   return (
     <>
-    <header>
+      <header>
         <h1>Proyecto IoT</h1>
         <nav>
-            <a href="#documentacion">Documentación</a>
-            <a href="#visualizacion-sensores">Datos de Sensores</a>
+          <a href="#documentacion">Documentación</a>
+          <a href="#visualizacion-sensores">Datos de Sensores</a>
         </nav>
-    </header>
+      </header>
 
-    <div className="container">
+      <div className="container">
         <section id="visualizacion-sensores" className="section">
-            <h2>Datos de Sensores</h2>
-            <p>A continuación se presentan las gráficas de los datos recopilados de los diferentes sensores del carrito IoT.</p>
-            
-            <div className="sensor-graficas">
-                <div className="sensor-grafico">
-                  <h3>Sensor ADC</h3>
-                  <ResponsiveContainer width="100%" height={250}>
-                    <LineChart data={formattedData}>
-                      <CartesianGrid strokeDasharray="3 3" />
-                      <XAxis dataKey="fecha" />
-                      <YAxis />
-                      <Tooltip />
-                      <Legend />
-                      <Line type="monotone" dataKey="voltage" stroke="#ff7043" />
-                      <Line type="monotone" dataKey="analog_value" stroke="#4CAF50" />
-                    </LineChart>
-                  </ResponsiveContainer>
+          <h2>Datos de Sensores</h2>
+          <p>A continuación se presentan las gráficas de los datos recopilados de los diferentes sensores del carrito IoT.</p>
 
-                </div>
-
-                <div className="sensor-grafico">
-                    <h3>Sensor Acelerometro</h3>
-                    <ResponsiveContainer width="100%" height={250}>
-                    <LineChart data={formattedData}>
-                      <CartesianGrid strokeDasharray="3 3" />
-                      <XAxis dataKey="fecha" />
-                      <YAxis />
-                      <Tooltip />
-                      <Legend />
-                      <Line type="monotone" dataKey="voltage" stroke="#ff7043" />
-                      <Line type="monotone" dataKey="analog_value" stroke="#4CAF50" />
-                    </LineChart>
-                  </ResponsiveContainer>
-                </div>
-
-                <div className="sensor-grafico">
-                    <h3>Sensor BME</h3>
-                    <ResponsiveContainer width="100%" height={250}>
-                    <LineChart data={formattedData}>
-                      <CartesianGrid strokeDasharray="3 3" />
-                      <XAxis dataKey="fecha" />
-                      <YAxis />
-                      <Tooltip />
-                      <Legend />
-                      <Line type="monotone" dataKey="voltage" stroke="#ff7043" />
-                      <Line type="monotone" dataKey="analog_value" stroke="#4CAF50" />
-                    </LineChart>
-                  </ResponsiveContainer>
-                </div>
-
-                <div className="sensor-grafico">
-                    <h3>Sensor de Distancia</h3>
-                    <ResponsiveContainer width="100%" height={250}>
-                    <LineChart data={formattedData}>
-                      <CartesianGrid strokeDasharray="3 3" />
-                      <XAxis dataKey="fecha" />
-                      <YAxis />
-                      <Tooltip />
-                      <Legend />
-                      <Line type="monotone" dataKey="voltage" stroke="#ff7043" />
-                      <Line type="monotone" dataKey="analog_value" stroke="#4CAF50" />
-                    </LineChart>
-                  </ResponsiveContainer>
-                </div>
+          <div className="sensor-graficas">
+            <div className="sensor-grafico">
+              <h3>Sensor ADC</h3>
+              <ResponsiveContainer width="100%" height={250}>
+                <LineChart data={formattedAdcData}>
+                  <CartesianGrid strokeDasharray="3 3" />
+                  <XAxis dataKey="fecha" />
+                  <YAxis />
+                  <Tooltip />
+                  <Legend />
+                  <Line type="monotone" dataKey="voltage" stroke="#ff7043" />
+                  <Line type="monotone" dataKey="analog_value" stroke="#4CAF50" />
+                </LineChart>
+              </ResponsiveContainer>
             </div>
+
+            <div className="sensor-grafico">
+              <h3>Sensor Acelerometro</h3>
+              <ResponsiveContainer width="100%" height={250}>
+                <LineChart data={formattedAcelerometroData}>
+                  <CartesianGrid strokeDasharray="3 3" />
+                  <XAxis dataKey="fecha" />
+                  <YAxis />
+                  <Tooltip />
+                  <Legend />
+                  <Line type="monotone" dataKey="x_cor" stroke="#ff7043" />
+                  <Line type="monotone" dataKey="y_cor" stroke="#4CAF50" />
+                  <Line type="monotone" dataKey="z_cor" stroke="#42A5F5" />
+                </LineChart>
+              </ResponsiveContainer>
+            </div>
+
+            <div className="sensor-grafico">
+              <h3>Sensor BME</h3>
+              <ResponsiveContainer width="100%" height={250}>
+                <LineChart data={formattedBmeData}>
+                  <CartesianGrid strokeDasharray="3 3" />
+                  <XAxis dataKey="fecha" />
+                  <YAxis />
+                  <Tooltip />
+                  <Legend />
+                  <Line type="monotone" dataKey="temp" stroke="#ff7043" />
+                  <Line type="monotone" dataKey="presion" stroke="#4CAF50" />
+                  <Line type="monotone" dataKey="altitud" stroke="#42A5F5" />
+                </LineChart>
+              </ResponsiveContainer>
+            </div>
+
+            <div className="sensor-grafico">
+              <h3>Sensor de Distancia</h3>
+              <ResponsiveContainer width="100%" height={250}>
+                <LineChart data={formattedDistanciaData}>
+                  <CartesianGrid strokeDasharray="3 3" />
+                  <XAxis dataKey="fecha" />
+                  <YAxis />
+                  <Tooltip />
+                  <Legend />
+                  <Line type="monotone" dataKey="dist_cm" stroke="#ff7043" />
+                </LineChart>
+              </ResponsiveContainer>
+            </div>
+          </div>
         </section>
 
         <section id="documentacion" className="section">
-            <h2>Documentación Técnica</h2>
-            <p>Accede a la documentación detallada del proyecto, incluyendo esquemas, circuitos y código.</p>
-            <a href="https://github.com/2003gdb/proyecto_Iot/" className="button">Descargar Documentación</a>
+          <h2>Documentación Técnica</h2>
+          <p>Accede a la documentación detallada del proyecto, incluyendo esquemas, circuitos y código.</p>
+          <a href="https://github.com/2003gdb/proyecto_Iot/" className="button">Descargar Documentación</a>
         </section>
-    </div>
+      </div>
 
-    <footer>
+      <footer>
         <p>© 2023 Proyecto IoT - Todos los derechos reservados</p>
-    </footer>
+      </footer>
     </>
   );
 }
