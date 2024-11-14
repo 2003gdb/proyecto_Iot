@@ -29,6 +29,7 @@ def main():
         global adc
         global adc_channel
         global acelerometro
+        global bmp280
 
         i2c = busio.I2C(board.SCL, board.SDA)
         adc = ADS.ADS1115(i2c)
@@ -83,10 +84,10 @@ def send_data(json, sensor):
         time.sleep(0.1)
 
     # En espera de la conexion y publicación segura
-    print("En espera de la conexion y publicación segura")
     msg_info.wait_for_publish()
     mqttc.disconnect()
     mqttc.loop_stop()
+    print(json)
 
 def on_publish(client, userdata, mid, reason_code, properties):
     try:
