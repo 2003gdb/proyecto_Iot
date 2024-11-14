@@ -12,6 +12,9 @@ import RPi.GPIO as GPIO #BIBLIOTECAS PARA SENSOR DISTANCIA
 import threading
 import motores
 
+# Biblioteca para Manejar JSON
+import json
+
 def main():
 
     print("\nMENU\n")
@@ -36,19 +39,19 @@ def main():
 
         # Ciclo principal
         while True:
-            json_ADC = json_ADC()
+            json_ADC = json.dumps(json_ADC())
             send_data(json_ADC, "ADC")
             time.sleep(2)
 
-            json_Acelerometro = json_ADC()
+            json_Acelerometro = json.dumps(json_Acelerometro())
             send_data(json_Acelerometro, "Acelerometro")
             time.sleep(3)
 
-            json_BME = json_BME()
+            json_BME = json.dumps(json_BME())
             send_data(json_BME, "BME")
             time.sleep(3)
 
-            json_Distancia = json_Distancia()
+            json_Distancia = json.dumps(json_Distancia())
             send_data(json_Distancia, "Distancia")
             time.sleep(3)
 
