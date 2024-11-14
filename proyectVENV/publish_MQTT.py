@@ -39,20 +39,20 @@ def main():
 
         # Ciclo principal
         while True:
-            json_ADC = json.dumps(json_ADC())
-            send_data(json_ADC, "ADC")
+            json_ADC_data = json.dumps(json_ADC())
+            send_data(json_ADC_data, "ADC")
             time.sleep(2)
 
-            json_Acelerometro = json.dumps(json_Acelerometro())
-            send_data(json_Acelerometro, "Acelerometro")
+            json_Acelerometro_data = json.dumps(json_Acelerometro())
+            send_data(json_Acelerometro_data, "Acelerometro")
             time.sleep(3)
 
-            json_BME = json.dumps(json_BME())
-            send_data(json_BME, "BME")
+            json_BME_data = json.dumps(json_BME())
+            send_data(json_BME_data, "BME")
             time.sleep(3)
 
-            json_Distancia = json.dumps(json_Distancia())
-            send_data(json_Distancia, "Distancia")
+            json_Distancia_data = json.dumps(json_Distancia())
+            send_data(json_Distancia_data, "Distancia")
             time.sleep(3)
 
     elif opcion == "2":
