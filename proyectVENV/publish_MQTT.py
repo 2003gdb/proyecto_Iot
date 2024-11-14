@@ -1,12 +1,12 @@
 import paho.mqtt.client as mqtt
 import time
-# import board
-# import busio
-# import adafruit_ads1x15.ads1115 as ADS
-# from adafruit_ads1x15.analog_in import AnalogIn
-# import adafruit_adxl34x
-# import adafruit_bmp280
-# import RPi.GPIO as GPIO #BIBLIOTECAS PARA SENSOR DISTANCIA 
+import board
+import busio
+import adafruit_ads1x15.ads1115 as ADS
+from adafruit_ads1x15.analog_in import AnalogIn
+import adafruit_adxl34x
+import adafruit_bmp280
+import RPi.GPIO as GPIO #BIBLIOTECAS PARA SENSOR DISTANCIA 
 
 # Biblioteca controlar motores
 import threading
@@ -16,17 +16,24 @@ def main():
 
     print("\nMENU\n")
     print("1. Enviar Datos Sensores")
-    print("2. Controlar Carrito Local\n")
-    print("3. Controlar Carrito Remoto\n")
-    opcion = input()
+    print("2. Controlar Carrito Local")
+    print("3. Controlar Carrito Remoto")
+    opcion = input("::")
 
     if opcion == "1":
         # Inicializar los sensores
+
+        # Inicializar los sensores
+        global i2c
+        global adc
+        global adc_channel
+        global acelerometro
+        
         i2c = busio.I2C(board.SCL, board.SDA)
         adc = ADS.ADS1115(i2c)
         adc_channel = AnalogIn(adc, ADS.P0)
         acelerometro = adafruit_adxl34x.ADXL345(i2c)
-        bmp280 = adafruit_bmp280.Adafruit_BMP280_I2C(i2c, address=0x77)
+        bmp280 = adafruit_bmp280.Adafruit_BMP280_I2C(i2c, address=0x76)
         bmp280.sea_level_pressure = 1013.25   
 
         # Ciclo principal

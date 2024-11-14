@@ -15,7 +15,7 @@ def to_db(url, data):
         else:
             print("Error al enviar datos:", response.status_code, response.text)
     except Exception as e:
-        print("Error en la solicitud:", e)
+        print("Error enviando a db:", e)
 
 # Funciones para cada sensor
 def read_and_send_ADC(json_ADC):
