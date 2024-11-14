@@ -1,6 +1,7 @@
 import RPi.GPIO as GPIO
-from inputs import get_gamepad
-import threading
+import keyboard
+from publish_MQTT import send_data
+
 
 class Motores:
     def __init__(self) -> None:
@@ -74,28 +75,36 @@ class Motores:
         GPIO.output(self.motor4, GPIO.HIGH)
         GPIO.output(self.motor5, GPIO.LOW)
         GPIO.output(self.motor6, GPIO.HIGH)
-    
+
     def __del__(self):
         # Limpiar la configuración GPIO al eliminar la instancia
         GPIO.cleanup()
 
-def controlar_motores():
+def controlar_motores_local():
     motores = Motores()
-    
-    while True:
-        events = get_gamepad()
-        for event in events:
-            if event.ev_type == 'Key' and event.code == 'BTN_NORTH' and event.state == 1:  # Botón B en Switch
-                motores.adelante()
-            elif event.ev_type == 'Key' and event.code == 'BTN_SOUTH' and event.state == 1:  # Botón A en Switch
-                motores.atras()
-            elif event.ev_type == 'Key' and event.code == 'BTN_WEST' and event.state == 1:  # Botón Y en Switch
-                motores.turn_right()
-            elif event.ev_type == 'Key' and event.code == 'BTN_EAST' and event.state == 1:  # Botón X en Switch
-                motores.turn_left()
-            elif event.ev_type == 'Key' and event.code == 'BTN_MODE' and event.state == 1:  # Botón central (Home)
-                motores.detener()
 
-if __name__ == '__main__':
-    thread = threading.Thread(target=controlar_motores)
-    thread.start()
+    while True:
+        if keyboard.is_pressed('w'):  # Adelante
+            motores.adelante()
+        elif keyboard.is_pressed('s'):  # Atrás
+            motores.atras()
+        elif keyboard.is_pressed('a'):  # Izquierda
+            motores.turn_left()
+        elif keyboard.is_pressed('d'):  # Derecha
+            motores.turn_right()
+        elif keyboard.is_pressed('space'):  # Detener
+            motores.detener()
+
+def controlar_motores_remoto():
+
+    while True:
+        if keyboard.is_pressed('w'):  # Adelante
+            send_data("adelante", "ControlCarrito")
+        elif keyboard.is_pressed('s'):  # Atrás
+            send_data("atras", "ControlCarrito")
+        elif keyboard.is_pressed('a'):  # Izquierda
+            send_data("left", "ControlCarrito")
+        elif keyboard.is_pressed('d'):  # Derecha
+            send_data("right", "ControlCarrito")
+        elif keyboard.is_pressed('space'):  # Detener
+            send_data("stop", "ControlCarrito")
