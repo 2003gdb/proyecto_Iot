@@ -2,8 +2,7 @@ import RPi.GPIO as GPIO
 import keyboard
 from publish_MQTT import send_data
 
-
-class Motores:
+class MotoresClass:
     def __init__(self) -> None:
         #right wheel
         self.motor1 = 36  # Entrada
@@ -81,7 +80,7 @@ class Motores:
         GPIO.cleanup()
 
 def controlar_motores_local():
-    motores = Motores()
+    motores = MotoresClass()
 
     while True:
         if keyboard.is_pressed('w'):  # Adelante
@@ -95,6 +94,7 @@ def controlar_motores_local():
         elif keyboard.is_pressed('space'):  # Detener
             motores.detener()
 
+# Envia los Datos a Topico de MQTT SensoresIoT/ControlCarrito
 def controlar_motores_remoto():
 
     while True:

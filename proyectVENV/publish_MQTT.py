@@ -17,12 +17,14 @@ import json
 
 def main():
 
+    # MENU de control de carrito
     print("\nMENU\n")
     print("1. Enviar Datos Sensores")
     print("2. Controlar Carrito Local")
     print("3. Controlar Carrito Remoto")
     opcion = input("\n::: ")
 
+    # Envia datos de sensores
     if opcion == "1":
         # Inicializar los sensores
         global i2c
@@ -56,16 +58,18 @@ def main():
             send_data(json_Distancia_data, "Distancia")
             time.sleep(3)
 
+    # Controlar Motores localmente
     elif opcion == "2":
         thread = threading.Thread(target=motores.controlar_motores_local)
         thread.start()
     
+    # Controlar Motores Remotamente
     elif opcion == "3":
         thread = threading.Thread(target=motores.controlar_motores_remoto)
         thread.start()
 
 
-
+# Envia los Datos en Json a un Topic "SensoresIoT/<sensor>"
 def send_data(json, sensor):
     #Establecer conexion
     unacked_publish = set()
@@ -95,7 +99,7 @@ def on_publish(client, userdata, mid, reason_code, properties):
     except KeyError:
         print("No hay conexión")
 
-# Funciones para cada sensor
+# Obtener Datos del sensores y regresamos un json
 def json_ADC():
     valor_analogico = adc_channel.value
     voltaje = adc_channel.voltage
@@ -136,6 +140,7 @@ def json_Distancia():
     }
     return json_Distancia
 
+# Setup para medir distancia
 def medir_distancia(): 
     GPIO.setmode(GPIO.BCM)
 
