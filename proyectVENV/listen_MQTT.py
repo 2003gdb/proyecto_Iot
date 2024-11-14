@@ -13,10 +13,10 @@ def on_message(client, userdata, msg):
         print("Data sent to db, ADC", msg)
     elif topic == "Acelerometro":
         read_and_send_Acelerometro(msg)
-        print("Data sent to db, Ace", msg)
+        print("Data sent to db, Acelerometro", msg)
     elif topic == "Distancia":
         read_and_send_Distancia(msg)
-        print("Data sent to db, Dist", msg)
+        print("Data sent to db, Distancia", msg)
     elif topic == "BME":
         read_and_send_BME(msg)
         print("Data sent to db, BME", msg)

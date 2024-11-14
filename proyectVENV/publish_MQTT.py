@@ -18,17 +18,15 @@ def main():
     print("1. Enviar Datos Sensores")
     print("2. Controlar Carrito Local")
     print("3. Controlar Carrito Remoto")
-    opcion = input("::")
+    opcion = input("\n::: ")
 
     if opcion == "1":
-        # Inicializar los sensores
-
         # Inicializar los sensores
         global i2c
         global adc
         global adc_channel
         global acelerometro
-        
+
         i2c = busio.I2C(board.SCL, board.SDA)
         adc = ADS.ADS1115(i2c)
         adc_channel = AnalogIn(adc, ADS.P0)
@@ -38,16 +36,20 @@ def main():
 
         # Ciclo principal
         while True:
-            send_data(json_ADC(), "ADC")
+            json_ADC = json_ADC()
+            send_data(json_ADC, "ADC")
             time.sleep(2)
 
-            send_data(json_Acelerometro(), "Acelerometro")
+            json_Acelerometro = json_ADC()
+            send_data(json_Acelerometro, "Acelerometro")
             time.sleep(3)
 
-            send_data(json_BME(), "BME")
+            json_BME = json_BME()
+            send_data(json_BME, "BME")
             time.sleep(3)
 
-            send_data(json_Distancia(), "Distancia")
+            json_Distancia = json_Distancia()
+            send_data(json_Distancia, "Distancia")
             time.sleep(3)
 
     elif opcion == "2":
