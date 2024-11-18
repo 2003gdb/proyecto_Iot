@@ -14,8 +14,8 @@ import {
 
 interface ADC {
   id: number;
-  analog_value: number;
-  voltage: number;
+  valor_analogico: number;
+  voltaje: number;
   fecha: string;
 }
 
@@ -151,8 +151,8 @@ export default function Home() {
                   <YAxis />
                   <Tooltip />
                   <Legend />
-                  <Line type="monotone" dataKey="voltage" stroke="#ff7043" />
-                  <Line type="monotone" dataKey="analog_value" stroke="#4CAF50" />
+                  <Line type="monotone" dataKey="voltaje" stroke="#ff7043" />
+                  <Line type="monotone" dataKey="valor_analogico" stroke="#4CAF50" />
                 </LineChart>
               </ResponsiveContainer>
             </div>
