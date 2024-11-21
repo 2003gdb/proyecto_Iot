@@ -101,30 +101,6 @@ def controlar_motores(instruccion: str):
     motores.detener()
     print("Instrucción terminada. Motores detenidos.")
 
-def controlar_motores_local():
-    def on_press(key):
-        try:
-            if key.char == 'w':  # Adelante
-                motores.adelante()
-            elif key.char == 's':  # Atrás
-                motores.atras()
-            elif key.char == 'a':  # Izquierda
-                motores.turn_left()
-            elif key.char == 'd':  # Derecha
-                motores.turn_right()
-        except AttributeError:
-            pass
-
-    def on_release(key):
-        if key == keyboard.Key.space:  # Detener
-            motores.detener()
-        elif key == keyboard.Key.esc:
-            # Salir del programa al presionar ESC
-            return False
-
-    with keyboard.Listener(on_press=on_press, on_release=on_release) as listener:
-        listener.join()
-
 # Envia los Datos a Topico de MQTT SensoresIoT/ControlCarrito
 def controlar_motores_remoto():
     while True:

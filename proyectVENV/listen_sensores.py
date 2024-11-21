@@ -1,10 +1,12 @@
 import time
 from post_to_mysql import *
 import paho.mqtt.client as mqtt
+import json
 
 def on_message(client, userdata, msg):
     topic = msg.topic 
     msg = msg.payload.decode()
+    msg = json.loads(msg)
     topic = topic.split("/")[1]
     print(msg)
 
@@ -23,7 +25,7 @@ def on_message(client, userdata, msg):
     else:
         print("Data error")
     
-    print("Volviendo a esperar mensajes")
+    print("\nVolviendo a esperar mensajes")
     
 
 unacked_publish = set()

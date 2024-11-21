@@ -20,8 +20,6 @@ def main():
     # MENU de control de carrito
     print("\nMENU\n")
     print("1. Enviar Datos Sensores")
-    print("2. Controlar Carrito Local")
-    print("3. Controlar Carrito Remoto")
     opcion = input("\n::: ")
 
     # Envia datos de sensores
@@ -44,30 +42,17 @@ def main():
         while True:
             json_ADC_data = json.dumps(json_ADC())
             send_data(json_ADC_data, "ADC")
-            time.sleep(2)
 
             json_Acelerometro_data = json.dumps(json_Acelerometro())
             send_data(json_Acelerometro_data, "Acelerometro")
-            time.sleep(3)
 
             json_BME_data = json.dumps(json_BME())
             send_data(json_BME_data, "BME")
-            time.sleep(3)
 
             json_Distancia_data = json.dumps(json_Distancia())
             send_data(json_Distancia_data, "Distancia")
             time.sleep(3)
-
-    # Controlar Motores localmente
-    elif opcion == "2":
-        thread = threading.Thread(target=motores.controlar_motores_local)
-        thread.start()
     
-    # Controlar Motores Remotamente
-    elif opcion == "3":
-        thread = threading.Thread(target=motores.controlar_motores_remoto)
-        thread.start()
-
 # Obtener Datos del sensores y regresamos un json
 def json_ADC():
     valor_analogico = adc_channel.value
