@@ -18,7 +18,9 @@ class MotoresClass:
         self.detener()
 
     def configurar_motores(self) -> None:
-        GPIO.setmode(GPIO.BOARD)
+        if GPIO.getmode() is None:
+            GPIO.setmode(GPIO.BOARD)
+            
         GPIO.setup(self.motor1, GPIO.OUT)
         GPIO.setup(self.motor2, GPIO.OUT)
         GPIO.setup(self.motor3, GPIO.OUT)
