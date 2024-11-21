@@ -1,4 +1,3 @@
-import paho.mqtt.client as mqtt
 import time
 import board
 import busio
@@ -69,12 +68,6 @@ def main():
     elif opcion == "3":
         thread = threading.Thread(target=motores.controlar_motores_remoto)
         thread.start()
-
-def on_publish(client, userdata, mid, reason_code, properties):
-    try:
-        userdata.remove(mid)
-    except KeyError:
-        print("No hay conexión")
 
 # Obtener Datos del sensores y regresamos un json
 def json_ADC():

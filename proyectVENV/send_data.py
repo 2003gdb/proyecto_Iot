@@ -1,4 +1,12 @@
+import paho.mqtt.client as mqtt
+import time
 
+def on_publish(client, userdata, mid, reason_code, properties):
+    try:
+        userdata.remove(mid)
+    except KeyError:
+        print("No hay conexión")
+        
 # Envia los Datos en Json a un Topic "SensoresIoT/<sensor>"
 def send_data(json, sensor):
     #Establecer conexion
