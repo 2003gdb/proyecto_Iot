@@ -1,5 +1,4 @@
 import time
-from post_to_mysql import *
 import paho.mqtt.client as mqtt
 from motores import *
 

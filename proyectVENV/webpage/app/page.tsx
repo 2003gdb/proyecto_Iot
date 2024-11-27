@@ -47,14 +47,57 @@ export default function Home() {
   const [distanciaData, setDistanciaData] = useState<Distancia[]>([]);
   const [bmeData, setBmeData] = useState<BME[]>([]);
   const [isClient, setIsClient] = useState(false);
+  const [lastHours, setLastHours] = useState(false);
+  const [activeKey, setActiveKey] = useState<string | null>(null); 
+  const [status, setStatus] = useState<string>(""); 
 
   useEffect(() => {
     setIsClient(true);
   }, []);
 
+  const handleKeyPress = (command: string) => {
+    if (["w", "a", "s", "d", "stop"].includes(command) && command !== activeKey) {
+      setActiveKey(command);
+      controlarCarrito(command);
+      if(command == "stop"){
+        setStatus(`Car Stopped`);
+      } else {
+        setStatus(`Moving ${command.toUpperCase()}`);
+      }
+    }
+  };
+
+  function getlastHours() {
+    const date = new Date();
+    date.setHours(date.getHours() - 24); 
+    return date.toISOString(); 
+  }
+
+  const controlarCarrito = (comando: string) => {
+    fetch('http://127.0.0.1:8000/Movimiento', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ comando }),
+    })
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error(`Error: ${response.statusText}`);
+        }
+        return response.json();
+      })
+      .then((data) => console.log('Respuesta del backend:', data))
+      .catch((error) => console.error('Error al controlar el carrito:', error));
+  };
+
   async function fetchAdcData() {
     try {
-      const response = await axios.get("http://127.0.0.1:8000/get_sensorADC");
+      const params = new URLSearchParams();
+      if (lastHours) {
+        params.append("fecha_inicio", getlastHours());
+      }
+      const response = await axios.get("http://127.0.0.1:8000/get_sensorADC", { params });
       setAdcData(response.data);
     } catch (error) {
       console.error("Error fetching ADC data:", error);
@@ -63,7 +106,11 @@ export default function Home() {
 
   async function fetchAcelerometroData() {
     try {
-      const response = await axios.get("http://127.0.0.1:8000/get_sensorAcelerometro");
+      const params = new URLSearchParams();
+      if (lastHours) {
+        params.append("fecha_inicio", getlastHours());
+      }
+      const response = await axios.get("http://127.0.0.1:8000/get_sensorAcelerometro", { params });
       setAcelerometroData(response.data);
     } catch (error) {
       console.error("Error fetching Acelerometro data:", error);
@@ -72,7 +119,11 @@ export default function Home() {
 
   async function fetchDistanciaData() {
     try {
-      const response = await axios.get("http://127.0.0.1:8000/get_sensorDistancia");
+      const params = new URLSearchParams();
+      if (lastHours) {
+        params.append("fecha_inicio", getlastHours());
+      }
+      const response = await axios.get("http://127.0.0.1:8000/get_sensorDistancia", { params });
       setDistanciaData(response.data);
     } catch (error) {
       console.error("Error fetching Distancia data:", error);
@@ -81,7 +132,11 @@ export default function Home() {
 
   async function fetchBmeData() {
     try {
-      const response = await axios.get("http://127.0.0.1:8000/get_sensorBME");
+      const params = new URLSearchParams();
+      if (lastHours) {
+        params.append("fecha_inicio", getlastHours());
+      }
+      const response = await axios.get("http://127.0.0.1:8000/get_sensorBME", { params });
       setBmeData(response.data);
     } catch (error) {
       console.error("Error fetching BME data:", error);
@@ -99,10 +154,12 @@ export default function Home() {
       fetchAcelerometroData();
       fetchDistanciaData();
       fetchBmeData();
-    }, 2000);
+    }, 5000);
+
+    console.log("lastHours changed:", lastHours);
 
     return () => clearInterval(interval);
-  }, []);
+  }, [lastHours]);
 
   if (!isClient) return null;
 
@@ -137,9 +194,34 @@ export default function Home() {
       </header>
 
       <div className="container">
+
+        <section id="control-carrito" className="section">
+          <h2>Control del Carrito</h2>
+          <p>Utiliza los controles a continuación o las teclas <strong>W, A, S, D</strong> en tu teclado para controlar el carrito.</p>
+          <div id="carrito-controles">
+            <div className="fila">
+              <button className="control-button" onClick={() => handleKeyPress('w') }>W</button>
+            </div>
+            <div className="fila">
+              <button className="control-button" onClick={() => handleKeyPress('a') }>A</button>
+              <button className="control-button" onClick={() => handleKeyPress('s') }>S</button>
+              <button className="control-button" onClick={() => handleKeyPress('d') }>D</button>
+            </div>
+            <div>
+              <button className="control-button" onClick={() => handleKeyPress('stop') }>STOP</button>
+            </div>
+          </div>
+          <p>Status: {status}</p>
+        </section>
+
         <section id="visualizacion-sensores" className="section">
           <h2>Datos de Sensores</h2>
           <p>A continuación se presentan las gráficas de los datos recopilados de los diferentes sensores del carrito IoT.</p>
+
+          <div id="filtro">
+            <button className="button" onClick={() => setLastHours(true)}>  Filtrar al ultimo día  </button>
+            <button className="button" onClick={() => setLastHours(false)}>   Datos Historico  </button>
+          </div>
 
           <div className="sensor-graficas">
             <div className="sensor-grafico">

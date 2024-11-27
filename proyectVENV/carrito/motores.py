@@ -93,25 +93,8 @@ def controlar_motores(instruccion: str):
         motores.turn_left()
     elif instruccion == "d":  # Derecha
         motores.turn_right()
+    elif instruccion == "stop":
+        motores.detener()
     else:
         print("Instrucción no válida")
-
-    # Ejecutar por 5 segundos
-    time.sleep(5)
-    motores.detener()
-    print("Instrucción terminada. Motores detenidos.")
-
-# Envia los Datos a Topico de MQTT SensoresIoT/ControlCarrito
-def controlar_motores_remoto():
-    while True:
-        if keyboard.is_pressed('w'):  # Adelante
-            send_data("w", "ControlCarrito")
-        elif keyboard.is_pressed('s'):  # Atrás
-            send_data("s", "ControlCarrito")
-        elif keyboard.is_pressed('a'):  # Izquierda
-            send_data("a", "ControlCarrito")
-        elif keyboard.is_pressed('d'):  # Derecha
-            send_data("d", "ControlCarrito")
-        elif keyboard.is_pressed('space'):  # Detener
-            send_data("space", "ControlCarrito")
 

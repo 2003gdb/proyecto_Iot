@@ -2,7 +2,9 @@ from fastapi import FastAPI, Depends
 from pydantic import BaseModel
 from sqlalchemy.orm import Session
 from fastapi.middleware.cors import CORSMiddleware
+from typing import Optional
 from dbs import SessionLocal, SensorADC, SensorDistancia, SensorAcelerometro, SensorBME
+from carrito.send_data import send_data
 
 app = FastAPI()
 
@@ -13,6 +15,8 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+class Instruccion(BaseModel):
+    comando: str 
 
 class sensorADC_DTO(BaseModel):
     fecha: str
@@ -52,20 +56,56 @@ async def delete_all_data(db: Session = Depends(get_db)):
     return {"message": "All data deleted"}
 
 @app.get("/get_sensorADC")
-def get_datos_sensorADC(db: Session = Depends(get_db)):
-    return db.query(SensorADC).all()
+def get_datos_sensorADC(
+    fecha_inicio: Optional[str] = None,
+    fecha_fin: Optional[str] = None,
+    db: Session = Depends(get_db)
+):
+    query = db.query(SensorADC)
+    if fecha_inicio:
+        query = query.filter(SensorADC.fecha >= fecha_inicio)
+    if fecha_fin:
+        query = query.filter(SensorADC.fecha <= fecha_fin)
+    return query.all()
 
 @app.get("/get_sensorAcelerometro")
-def get_datos_sensorAcelerometro(db: Session = Depends(get_db)):
-    return db.query(SensorAcelerometro).all()
+def get_datos_sensorAcelerometro(
+    fecha_inicio: Optional[str] = None,
+    fecha_fin: Optional[str] = None,
+    db: Session = Depends(get_db)
+):
+    query = db.query(SensorAcelerometro)
+    if fecha_inicio:
+        query = query.filter(SensorAcelerometro.fecha >= fecha_inicio)
+    if fecha_fin:
+        query = query.filter(SensorAcelerometro.fecha <= fecha_fin)
+    return query.all()
 
 @app.get("/get_sensorBME")
-def get_datos_sensorBME(db: Session = Depends(get_db)):
-    return db.query(SensorBME).all()
+def get_datos_sensorBME(
+    fecha_inicio: Optional[str] = None,
+    fecha_fin: Optional[str] = None,
+    db: Session = Depends(get_db)
+):
+    query = db.query(SensorBME)
+    if fecha_inicio:
+        query = query.filter(SensorBME.fecha >= fecha_inicio)
+    if fecha_fin:
+        query = query.filter(SensorBME.fecha <= fecha_fin)
+    return query.all()
 
 @app.get("/get_sensorDistancia")
-def get_datos_sensorDistancia(db: Session = Depends(get_db)):
-    return db.query(SensorDistancia).all()
+def get_datos_sensorDistancia(
+    fecha_inicio: Optional[str] = None,
+    fecha_fin: Optional[str] = None,
+    db: Session = Depends(get_db)
+):
+    query = db.query(SensorDistancia)
+    if fecha_inicio:
+        query = query.filter(SensorDistancia.fecha >= fecha_inicio)
+    if fecha_fin:
+        query = query.filter(SensorDistancia.fecha <= fecha_fin)
+    return query.all()
 
 @app.post("/post_sensorADC")
 async def add_dato_sensorADC(sensor: sensorADC_DTO, db: Session = Depends(get_db)):
@@ -99,18 +139,16 @@ async def add_dato_sensorDistancia(sensor: sensorDistancia_DTO, db: Session = De
     db.refresh(sensor_data)
     return sensor_data
 
-@app.get("/find_by_fecha_sensorADC/{fecha}")
-async def find_by_fecha_sensorADC(fecha: str, db: Session = Depends(get_db)):
-    return db.query(SensorADC).filter(SensorADC.fecha == fecha).first()
+@app.post("/Movimiento")
+async def Mover_carrito(instruccion: Instruccion):
+    comando = instruccion.comando
+    print(comando)
+    if comando not in ["w", "a", "s", "d", "stop"]:
+        return {"status": "Instrucción no válida", "comando": comando}
+    send_data(comando, "ControlCarrito")
+    return {"status": "Movimiento ejecutado", "comando": comando}
 
-@app.get("/find_by_fecha_sensorAcelerometro/{fecha}")
-async def find_by_fecha_sensorAcelerometro(fecha: str, db: Session = Depends(get_db)):
-    return db.query(SensorAcelerometro).filter(SensorAcelerometro.fecha == fecha).first()
 
-@app.get("/find_by_fecha_sensorBME/{fecha}")
-async def find_by_fecha_sensorBME(fecha: str, db: Session = Depends(get_db)):
-    return db.query(SensorBME).filter(SensorBME.fecha == fecha).first()
 
-@app.get("/find_by_fecha_sensorDistancia/{fecha}")
-async def find_by_fecha_sensorDistancia(fecha: str, db: Session = Depends(get_db)):
-    return db.query(SensorDistancia).filter(SensorDistancia.fecha == fecha).first()
+
+

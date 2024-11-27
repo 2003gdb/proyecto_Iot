@@ -10,20 +10,13 @@ import RPi.GPIO as GPIO #BIBLIOTECAS PARA SENSOR DISTANCIA
 from send_data import send_data
 
 # Biblioteca controlar motores
-import threading
-import motores
+import paho.mqtt.client as mqtt
+from motores import *
 
 # Biblioteca para Manejar JSON
 import json
 
 def main():
-    # MENU de control de carrito
-    print("\nMENU\n")
-    print("1. Enviar Datos Sensores")
-    opcion = input("\n::: ")
-
-    # Envia datos de sensores
-    if opcion == "1":
         # Inicializar los sensores
         global i2c
         global adc
@@ -38,21 +31,54 @@ def main():
         bmp280 = adafruit_bmp280.Adafruit_BMP280_I2C(i2c, address=0x76)
         bmp280.sea_level_pressure = 1013.25   
 
-        # Ciclo principal
-        while True:
-            json_ADC_data = json.dumps(json_ADC())
-            send_data(json_ADC_data, "ADC")
+        unacked_publish = set()
+        mqtt_client = mqtt.Client(mqtt.CallbackAPIVersion.VERSION2)
 
-            json_Acelerometro_data = json.dumps(json_Acelerometro())
-            send_data(json_Acelerometro_data, "Acelerometro")
+        mqtt_client.on_message = on_message
 
-            json_BME_data = json.dumps(json_BME())
-            send_data(json_BME_data, "BME")
+        mqtt_client.connect("broker.hivemq.com", 1883)
+        mqtt_client.loop_start()
+        mqtt_client.subscribe("SensoresIoT/ControlCarrito")
 
-            json_Distancia_data = json.dumps(json_Distancia())
-            send_data(json_Distancia_data, "Distancia")
-            time.sleep(3)
+        try:
+            print("Esperando mensajes AND sending Data")
+            # Ciclo principal
+            while True:
+                json_ADC_data = json.dumps(json_ADC())
+                send_data(json_ADC_data, "ADC")
+
+                json_Acelerometro_data = json.dumps(json_Acelerometro())
+                send_data(json_Acelerometro_data, "Acelerometro")
+
+                json_BME_data = json.dumps(json_BME())
+                send_data(json_BME_data, "BME")
+
+                json_Distancia_data = json.dumps(json_Distancia())
+                send_data(json_Distancia_data, "Distancia")
+
+                time.sleep(3)
+        except KeyboardInterrupt:
+            print("Proceso interrumpido por el usuario")
+        except Exception as e:
+            print(f"Ocurrió un error: {e}")
+        finally:
+            mqtt_client.loop_stop()
+            mqtt_client.disconnect()
+        
+def on_message(client, userdata, msg):
+    topic = msg.topic 
+    msg = msg.payload.decode()
+    topic = topic.split("/")[1]
+    print(msg)
     
+    if topic == "ControlCarrito":
+        controlar_motores(msg)
+        print("Data sent to function controlar carrito", msg)
+    else:
+        print("Data error")
+    
+    print("Volviendo a esperar mensajes")
+
 # Obtener Datos del sensores y regresamos un json
 def json_ADC():
     valor_analogico = adc_channel.value
