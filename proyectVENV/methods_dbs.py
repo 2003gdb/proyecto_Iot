@@ -1,3 +1,7 @@
+# Metodos de la FastAPI
+# Interactuar con la base de datos 
+# Movimiento del carrito
+
 from fastapi import FastAPI, Depends
 from pydantic import BaseModel
 from sqlalchemy.orm import Session
@@ -145,6 +149,7 @@ async def Mover_carrito(instruccion: Instruccion):
     print(comando, ",(methods_dbs)")
     if comando not in ["w", "a", "s", "d", "stop"]:
         return {"status": "Instrucción no válida", "comando": comando}
+    # Send_data se encuentra dentro de la carpeta carrito
     send_data(comando, "ControlCarrito")
     return {"status": "Movimiento ejecutado", "comando": comando}
 

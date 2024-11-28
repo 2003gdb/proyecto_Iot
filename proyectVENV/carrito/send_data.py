@@ -1,3 +1,6 @@
+# Usamos send_data para publicar a los diferentes Topicos de MQTT
+# La funcion recibe el mensaje, en formato de JSON y el Topico a donde sera publicado.
+
 import paho.mqtt.client as mqtt
 import time
 

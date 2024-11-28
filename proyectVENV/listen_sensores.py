@@ -1,3 +1,6 @@
+# Escucha los datos de los sensores del carrito por medio de MQTT 
+# Manda a llamar a post_to_mysql, en donde los sube a la Base de datos.
+
 import time
 from post_to_mysql import *
 import paho.mqtt.client as mqtt

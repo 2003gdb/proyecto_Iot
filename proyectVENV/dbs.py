@@ -1,3 +1,5 @@
+# Inicializa para poder interactuar con la base de datos.
+
 from sqlalchemy import create_engine, Column, Integer, String, DateTime, Double
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker

@@ -1,3 +1,5 @@
+# Logica para manejar el carrito
+
 from send_data import send_data
 import RPi.GPIO as GPIO
 

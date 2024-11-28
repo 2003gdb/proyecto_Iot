@@ -1,3 +1,6 @@
+# Mandamos llamar los metodos POST de la fastAPI
+# Con los datos de los sensores, para ser agregados a la Base de Datos
+
 import requests
 
 # URLs de los endpoints

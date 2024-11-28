@@ -1,3 +1,7 @@
+# Ciclo principal que va a estar corriendo en el Carrito.
+# Aqui se estaran mandando los datos recopilados
+# Escuchando instrucciones de movimiento por MQTT
+
 import time
 import board
 import busio
@@ -8,9 +12,6 @@ import adafruit_bmp280
 import RPi.GPIO as GPIO #BIBLIOTECAS PARA SENSOR DISTANCIA 
 
 from send_data import send_data
-
-# Biblioteca controlar motores
-import paho.mqtt.client as mqtt
 from motores import *
 
 # Biblioteca para Manejar JSON
