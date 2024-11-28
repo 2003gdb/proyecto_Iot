@@ -39,7 +39,6 @@ mqtt_client.subscribe("SensoresIoT/ADC")
 mqtt_client.subscribe("SensoresIoT/Acelerometro")
 mqtt_client.subscribe("SensoresIoT/Distancia")
 mqtt_client.subscribe("SensoresIoT/BME")
-mqtt_client.subscribe("SensoresIoT/ControlCarrito")
 
 try:
     print("Esperando mensajes")
