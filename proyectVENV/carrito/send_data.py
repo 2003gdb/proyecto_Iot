@@ -10,7 +10,6 @@ def on_publish(client, userdata, mid, reason_code, properties):
 # Envia los Datos en Json a un Topic "SensoresIoT/<sensor>"
 def send_data(json, sensor):
     #Establecer conexion
-    print("Send_data_log")
     unacked_publish = set()
     mqttc = mqtt.Client(mqtt.CallbackAPIVersion.VERSION2)
     mqttc.on_publish = on_publish
@@ -22,7 +21,7 @@ def send_data(json, sensor):
     unacked_publish.add(msg_info.mid)
 
     # Espera publicando mensaje
-    print("Espera publicando mensaje")
+    print("Espera publicando mensaje,(Send_data)")
     while len(unacked_publish):
         time.sleep(0.1)
 
@@ -30,4 +29,4 @@ def send_data(json, sensor):
     msg_info.wait_for_publish()
     mqttc.disconnect()
     mqttc.loop_stop()
-    print("sent")
+    print("sent,(Send_data)")

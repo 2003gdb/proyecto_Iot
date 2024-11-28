@@ -142,7 +142,7 @@ async def add_dato_sensorDistancia(sensor: sensorDistancia_DTO, db: Session = De
 @app.post("/Movimiento")
 async def Mover_carrito(instruccion: Instruccion):
     comando = instruccion.comando
-    print(comando)
+    print(comando, ",(methods_dbs)")
     if comando not in ["w", "a", "s", "d", "stop"]:
         return {"status": "Instrucción no válida", "comando": comando}
     send_data(comando, "ControlCarrito")

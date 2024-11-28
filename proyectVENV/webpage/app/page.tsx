@@ -67,6 +67,17 @@ export default function Home() {
     }
   };
 
+  useEffect(() => {
+    const handleKeyboardEvent = (event: KeyboardEvent) => {
+      const command = event.key.toLowerCase();
+      handleKeyPress(command); 
+    };
+    window.addEventListener("keydown", handleKeyboardEvent);
+    return () => {
+      window.removeEventListener("keydown", handleKeyboardEvent);
+    };
+  }, []);
+
   function getlastHours() {
     const date = new Date();
     date.setHours(date.getHours() - 24); 
@@ -154,7 +165,7 @@ export default function Home() {
       fetchAcelerometroData();
       fetchDistanciaData();
       fetchBmeData();
-    }, 5000);
+    }, 10000);
 
     console.log("lastHours changed:", lastHours);
 
@@ -188,8 +199,9 @@ export default function Home() {
       <header>
         <h1>Proyecto IoT</h1>
         <nav>
-          <a href="#documentacion">Documentación</a>
+          <a href="#control-carrito">Control del Carrito</a>
           <a href="#visualizacion-sensores">Datos de Sensores</a>
+          <a href="#documentacion">Documentación</a>
         </nav>
       </header>
 
@@ -200,15 +212,15 @@ export default function Home() {
           <p>Utiliza los controles a continuación o las teclas <strong>W, A, S, D</strong> en tu teclado para controlar el carrito.</p>
           <div id="carrito-controles">
             <div className="fila">
-              <button className="control-button" onClick={() => handleKeyPress('w') }>W</button>
+              <button className={`control-button ${activeKey === 'w' ? 'active' : ''}`} onClick={() => handleKeyPress('w') }>W</button>
             </div>
             <div className="fila">
-              <button className="control-button" onClick={() => handleKeyPress('a') }>A</button>
-              <button className="control-button" onClick={() => handleKeyPress('s') }>S</button>
-              <button className="control-button" onClick={() => handleKeyPress('d') }>D</button>
+              <button className={`control-button ${activeKey === 'a' ? 'active' : ''}`} onClick={() => handleKeyPress('a') }>A</button>
+              <button className={`control-button ${activeKey === 's' ? 'active' : ''}`} onClick={() => handleKeyPress('s') }>S</button>
+              <button className={`control-button ${activeKey === 'd' ? 'active' : ''}`} onClick={() => handleKeyPress('d') }>D</button>
             </div>
             <div>
-              <button className="control-button" onClick={() => handleKeyPress('stop') }>STOP</button>
+              <button className={`control-button ${activeKey === 'stop' ? 'active' : ''}`} onClick={() => handleKeyPress('stop') }>STOP</button>
             </div>
           </div>
           <p>Status: {status}</p>

@@ -41,7 +41,7 @@ def main():
         mqtt_client.subscribe("SensoresIoT/ControlCarrito")
 
         try:
-            print("Esperando mensajes AND sending Data")
+            print("Waiting Commands AND sending Data")
             # Ciclo principal
             while True:
                 json_ADC_data = json.dumps(json_ADC())

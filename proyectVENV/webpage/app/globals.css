@@ -10,11 +10,15 @@ body {
   color: #333;
 }
 
-/* Header */
 header {
-  background-color: #ff7043; /* Naranja intenso */
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  background-color: #ff7043;
   color: #ffffff;
-  padding: 1.5em 0;
+  padding: 10px 0; 
+  z-index: 1000; 
   text-align: center;
   box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
 }
@@ -43,7 +47,7 @@ nav a:hover {
 
 .container {
   max-width: 1200px;
-  margin: 10px auto;
+  margin: 80px auto;
   padding: 10px;
 }
 
@@ -73,8 +77,9 @@ p {
 }
 
 #filtro {
+  display: flex;  
   padding-bottom: 25px;
-  padding-left: 350px;
+  justify-content: center;
 }
 
 #documentacion {
@@ -92,7 +97,6 @@ p {
   color: #666;
 }
 
-/* Botones */
 .button {
   background-color: #ff7043;
   color: #ffffff;
@@ -144,19 +148,14 @@ footer p {
   box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);
 }
 
-/* globals.css */
-
-/* Line chart container */
 .line-chart-container {
   margin: 5px 20px;
 }
 
-/* Cartesian grid line style */
 .cartesian-grid {
   stroke-dasharray: 3 3;
 }
 
-/* Line colors */
 .line-voltage {
   stroke: #ff7043;
   fill: #ff7043;

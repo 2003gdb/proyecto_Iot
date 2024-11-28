@@ -1,7 +1,8 @@
 from motores import *
 import time
-controlar_motores("w")
 
+
+controlar_motores("w")
 time.sleep(2)
 controlar_motores("stop")
 

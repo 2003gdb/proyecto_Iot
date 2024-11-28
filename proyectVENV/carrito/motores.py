@@ -1,6 +1,4 @@
-import keyboard
 from send_data import send_data
-import time
 import RPi.GPIO as GPIO
 
 class MotoresClass:
@@ -39,7 +37,6 @@ class MotoresClass:
         GPIO.output(self.motor6, GPIO.LOW)
     
     def adelante(self) -> None:
-        # Activar motores para moverse hacia adelante
         GPIO.output(self.motor1, GPIO.HIGH)
         GPIO.output(self.motor2, GPIO.LOW)
         GPIO.output(self.motor3, GPIO.HIGH)
@@ -49,7 +46,6 @@ class MotoresClass:
         GPIO.output(self.motor6, GPIO.HIGH)
     
     def atras(self) -> None:
-        # Activar motores para moverse hacia adelante
         GPIO.output(self.motor1, GPIO.LOW)
         GPIO.output(self.motor2, GPIO.HIGH)
         GPIO.output(self.motor3, GPIO.HIGH)
@@ -59,7 +55,6 @@ class MotoresClass:
         GPIO.output(self.motor6, GPIO.HIGH)
 
     def turn_left(self) -> None:
-        # Activar motores para moverse hacia adelante
         GPIO.output(self.motor1, GPIO.HIGH)
         GPIO.output(self.motor2, GPIO.LOW)
         GPIO.output(self.motor3, GPIO.HIGH)
@@ -69,7 +64,6 @@ class MotoresClass:
         GPIO.output(self.motor6, GPIO.LOW)
 
     def turn_right(self) -> None:
-        # Activar motores para moverse hacia adelante
         GPIO.output(self.motor1, GPIO.LOW)
         GPIO.output(self.motor2, GPIO.LOW)
         GPIO.output(self.motor3, GPIO.LOW)
@@ -84,7 +78,7 @@ class MotoresClass:
 
 def controlar_motores(instruccion: str):
     motores = MotoresClass()
-    print(f"Ejecutando instrucción: {instruccion}")
+    print(f"Ejecutando instrucción: {instruccion} ,(Motores.controlar_motores)")
     if instruccion == "w":  # Adelante
         motores.adelante()
     elif instruccion == "s":  # Atrás
